@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": [],
+  "properties": {
+    "name": {
+      "type": "string",
+      "default": "",
+      "title": "The Name Schema",
+      "minLength": 3,
+      "maxLength": 20,
+      "examples": ["light1"]
+    },
+    "room": {
+      "type": "string",
+      "default": "",
+      "title": "The Room Schema",
+      "minLength": 3,
+      "maxLength": 30,
+      "examples": ["bedroom", "kitchen", "livingroom"]
+    },
+    "status": {
+      "type": "string",
+      "title": "The Status Schema",
+      "enum": ["on", "off"],
+      "default": "off",
+      "description": "Represents the power status of a light device."
+    },
+    "brightness": {
+      "type": "integer",
+      "default": 0,
+      "title": "The Brightness Schema",
+      "minimum": 0,
+      "maximum": 100,
+      "examples": [0, 50, 100],
+      "description": "Represents the brightness of a light device as a percentage from 0 to 100."
+    },
+    "color": {
+      "type": "string",
+      "default": "white",
+      "title": "The Color Schema",
+      "minLength": 3,
+      "maxLength": 30,
+      "examples": ["white", "red", "blue"],
+      "description": "Represents the color of a light device as a string."
+    }
+  },
+  "examples": [
+    {
+      "name": "light1",
+      "room": "livingroom",
+      "status": "on",
+      "brightness": 75,
+      "color": "blue"
+    }
+  ]
+}

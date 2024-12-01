@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": ["name", "serial_number", "type", "status","room"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "default": "",
+      "title": "The Name Schema",
+      "minLength": 3,
+      "maxLength": 20,
+      "errorMessage": {
+            "minLength": "The name must be at least 3 characters long.",
+            "maxLength": "The name must not exceed 20 characters."
+        },
+      "examples": ["light1"]
+    },
+    "serial_number": {
+      "type": "string",
+      "default": "",
+      "title": "The Serial Schema",
+      "length": 12,
+      "examples": ["d073d5d47632"]
+    },
+    "type": {
+      "type": "string",
+      "default": "",
+      "title": "The Type Schema",
+      "minLength": 3,
+      "maxLength": 30,
+      "errorMessage": {
+            "minLength": "The type must be at least 3 characters long.",
+            "maxLength": "The type must not exceed 20 characters."
+        },
+      "examples": ["light", "thermostat", "motion sensor"]
+    },
+    "room": {
+      "type": "string",
+      "default": "",
+      "title": "The Room Schema",
+      "minLength": 3,
+      "maxLength": 30,
+      "errorMessage": {
+            "minLength": "The room must be at least 3 characters long.",
+            "maxLength": "The room must not exceed 20 characters."
+        },
+      "examples": ["bedroom", "kitchen", "livingroom"]
+    },
+    "status": {
+      "type": "string",
+      "title": "The Status Schema",
+      "enum": ["on", "off"],
+      "default": "off",
+      "description": "Represents the power status of a light device."
+    },
+    "brightness": {
+      "type": "integer",
+      "default": 0,
+      "title": "The Brightness Schema",
+      "minimum": 0,
+      "maximum": 100,
+      "examples": [0, 50, 100],
+      "description": "Represents the brightness of a light device as a percentage from 0 to 100."
+    },
+    "color": {
+      "type": "string",
+      "default": "white",
+      "title": "The Color Schema",
+      "minLength": 3,
+      "maxLength": 30,
+      "examples": ["white", "red", "blue"],
+      "description": "Represents the color of a light device as a string."
+    }
+  },
+  "examples": [
+    {
+      "name": "light1",
+      "serial_number": "a1b2c3276091",
+      "room": "bedroom",
+      "type": "light",
+      "status": "on",
+      "brightness": 75,
+      "color": "blue"
+    }
+  ]
+}

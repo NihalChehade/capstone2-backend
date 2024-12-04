@@ -28,6 +28,12 @@
       "minLength": 6,
       "maxLength": 60,
       "format": "email"
+    },
+    "lifxToken": {
+      "type": "string",
+      "description": "Token to access LIFX API services",
+      "minLength": 10,
+      "maxLength": 100
     }
   },
   "additionalProperties": false,
@@ -36,6 +42,7 @@
     "firstName",
     "lastName",
     "password",
-    "email"
+    "email",
+    "lifxToken"
   ]
 }

@@ -3,7 +3,7 @@
 /** Routes for authentication. */
 
 const jsonschema = require("jsonschema");
-
+const {ensureLoggedIn} =require('../middleware/auth');
 const User = require("../models/userModel");
 const express = require("express");
 const router = new express.Router();
@@ -30,6 +30,8 @@ router.post("/token", async function (req, res, next) {
     const { username, password } = req.body;
     const user = await User.authenticate(username, password);
     const token = createToken(user);
+    res.locals.lifxToken = user.lifxToken;
+
     return res.json({ token });
   } catch (err) {
     return next(err);
@@ -55,12 +57,29 @@ router.post("/register", async function (req, res, next) {
     }
 
     const newUser = await User.register({ ...req.body});
+    
     const token = createToken(newUser);
+    res.locals.lifxToken = newUser.lifxToken;
     return res.status(201).json({ token });
   } catch (err) {
     return next(err);
   }
 });
+
+// Logout route
+// router.post('/logout', ensureLoggedIn, async function(req, res, next) {
+//   try {
+//       // Destroy the session
+//       req.session.destroy(err => {
+//           if (err) {
+//               return next(err);
+//           }
+//           res.status(200).json({ message: 'Logout successful.' });
+//       });
+//   } catch (err) {
+//       return next(err);
+//   }
+// });
 
 
 module.exports = router;

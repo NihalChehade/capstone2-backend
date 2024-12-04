@@ -7,6 +7,7 @@ function createToken(user) {
   
   let payload = {
     username: user.username,
+    LIFXToken : user.LIFXToken
   };
 
   return jwt.sign(payload, SECRET_KEY);

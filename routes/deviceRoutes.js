@@ -1,6 +1,6 @@
 const express = require('express');
 const Device = require('../models/deviceModel');
-const { ensureLoggedIn } = require('../middleware/auth');  
+const { ensureLoggedIn, fetchLifxToken } = require('../middleware/auth');  
 const jsonschema = require("jsonschema");
 const deviceNewSchema = require("../schemas/deviceNew.json");
 const deviceUpdateSchema = require("../schemas/deviceUpdate.json");
@@ -43,7 +43,8 @@ router.patch('/:name/rename', ensureLoggedIn, async (req, res, next) => {
 // Route to delete a device
 router.delete('/:name', ensureLoggedIn, async (req, res, next) => {
   try {
-    const deletedDevice = await Device.remove(req.params.name);
+    console.log("device name to delete from deviceRoutes.js", req.params.name)
+    const deletedDevice = await Device.remove(req.params.name, res.locals.user.username);
     res.json({ deleted: deletedDevice.name });
   } catch (error) {
     return next(error);
@@ -73,10 +74,10 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
 });
 
 // Route to change the status/brightness/color or all at once of a light
-router.patch('/lights/:name', ensureLoggedIn, deviceController.controlADevice);
+router.patch('/lights/:name', ensureLoggedIn, fetchLifxToken, deviceController.controlADevice);
 
 // Route to change the status/brightness/color or all at once for all devices of a user or by room
-router.patch('/lights', ensureLoggedIn, deviceController.controlManyDevices);
+router.patch('/lights', ensureLoggedIn, fetchLifxToken, deviceController.controlManyDevices);
 
 
 module.exports = router;

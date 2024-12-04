@@ -5,6 +5,7 @@
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
 const { UnauthorizedError } = require("../expressError");
+const User = require('../models/userModel')
 
 
 /** Middleware: Authenticate user.
@@ -62,8 +63,35 @@ function ensureCorrectUser(req, res, next) {
   }
 }
 
+/** 
+ *  Middleware to use when a lifxToken is needed for a deviceControl
+ *  
+ */
+async function fetchLifxToken(req, res, next) {
+  // Check if the user is authenticated
+  if (res.locals.user) {
+    try {
+      // Fetch the user's LIFX token from the database
+      const username = res.locals.user.username;
+      const user = await User.get(username); // Assuming User.get fetches the full user record
+
+      // Store the LIFX token in res.locals for use in subsequent handlers
+      res.locals.lifxToken = user.lifxToken;
+      next();
+    } catch (error) {
+      console.error("Error fetching LIFX token:", error);
+      next(error); // Forward to error handling middleware
+    }
+  } else {
+    // If no user is found in res.locals, skip fetching the LIFX token
+    next();
+  }
+}
+
+
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
-  ensureCorrectUser
+  ensureCorrectUser,
+  fetchLifxToken
 };

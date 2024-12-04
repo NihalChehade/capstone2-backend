@@ -32,9 +32,9 @@ router.get("/:username", ensureLoggedIn, ensureCorrectUser, async function (req,
 /** PATCH /[username] { user } => { user }
  *
  * Data can include:
- *   { firstName, lastName, password, email }
+ *   { firstName, lastName, password, email, lifxToken }
  *
- * Returns { username, firstName, lastName, email}
+ * Returns { username, firstName, lastName, email, lifxToken}
  *
  * Authorization required: same-user-as-:username
  **/

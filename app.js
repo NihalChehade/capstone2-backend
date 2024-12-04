@@ -9,10 +9,9 @@ const { NotFoundError } = require("./expressError");
 const { authenticateJWT } = require("./middleware/auth");
 
 const authRoutes = require("./routes/auth");
-// const automationRoutes = require("./routes/automationRoutes ");
+
 const userRoutes = require("./routes/userRoutes");
 const deviceRoutes= require("./routes/deviceRoutes");
-// const logRoutes = require("./routes/logRoutes")
 
 const morgan = require("morgan");
 
@@ -24,9 +23,9 @@ app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
 app.use("/auth", authRoutes);
-// app.use("/automation", automationRoutes);
+
 app.use("/users", userRoutes);
-// app.use("/logs", logRoutes);
+
 app.use("/devices", deviceRoutes)
 
 

@@ -7,14 +7,13 @@ require("dotenv").config();
 
 // Function to send commands to LIFX API
 
-async function sendLifxCommand(selector, action) {
+async function sendLifxCommand(selector, action, lifxToken) {
   try {
-    console.log("selector", selector);
-    console.log("action", action);
     const url = `${process.env.LIFX_API}/${selector}/state`;
     console.log("URL", url);
+    console.log("device controller lifxToken", lifxToken)
     const headers = {
-      Authorization: `Bearer ${process.env.LIFX_API_TOKEN}`,
+      Authorization: `Bearer ${lifxToken}`,
       "Content-Type": "application/json",
     };
 
@@ -30,7 +29,6 @@ async function sendLifxCommand(selector, action) {
 exports.controlADevice = async (req, res) => {
   const { name } = req.params;
   const { status, brightness, color } = req.body; 
-
   try {
     const validator = jsonschema.validate(req.body, deviceUpdateSchema);
     if (!validator.valid) {
@@ -39,6 +37,7 @@ exports.controlADevice = async (req, res) => {
     }
     console.log("res.locals.user.username", res.locals.user.username);
     console.log("res.locals.user", res.locals.user);
+    console.log("res.locals.lifxToken", res.locals.lifxToken)
     const device = await Device.findByDeviceName(name, res.locals.user.username);
     if (!device) {
       return res.status(404).json({ message: "Device not found" });
@@ -51,7 +50,7 @@ exports.controlADevice = async (req, res) => {
     if (color !== undefined) action.color = color;
 
     // Send command to LIFX API
-    const result = await sendLifxCommand(`id:${device.serial_number}`, action);
+    const result = await sendLifxCommand(`id:${device.serial_number}`, action, res.locals.lifxToken);
     if (result.error) {
       throw new Error(result.error);
     }
@@ -75,7 +74,6 @@ exports.controlADevice = async (req, res) => {
 exports.controlManyDevices = async (req, res) => {
   const { room, status, brightness, color } = req.body;
   const username = res.locals.user.username;
-
   try {
     // Retrieve devices based on room or for the entire user
     const devices = room
@@ -93,7 +91,7 @@ exports.controlManyDevices = async (req, res) => {
 
     // Attempt to send commands to all devices and collect results
     const apiPromises = devices.map((device) =>
-      sendLifxCommand(`id:${device.serial_number}`, actions)
+      sendLifxCommand(`id:${device.serial_number}`, actions, res.locals.lifxToken)
     );
 
     // Await all API calls

@@ -24,15 +24,17 @@ class User {
     return iv.toString('hex') + ':' + encrypted.toString('hex');
   }
 
-  /** Decrypt token */
-  static decrypt(text) {
-    const textParts = text.split(':');
-    const iv = Buffer.from(textParts.shift(), 'hex');
-    const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-    const decipher = crypto.createDecipheriv(algorithm, SECRET_KEY, iv);
-    const decrypted = Buffer.concat([decipher.update(encryptedText), decipher.final()]);
-    return decrypted.toString();
-  }
+ /** Decrypt token */
+static decrypt(text) {
+  if (!text) return null;  // Return null if token is not provided
+  const textParts = text.split(':');
+  const iv = Buffer.from(textParts.shift(), 'hex');
+  const encryptedText = Buffer.from(textParts.join(':'), 'hex');
+  const decipher = crypto.createDecipheriv(algorithm, SECRET_KEY, iv);
+  const decrypted = Buffer.concat([decipher.update(encryptedText), decipher.final()]);
+  return decrypted.toString();
+}
+
 
   /** Authenticate user with username, password.
    *

@@ -32,7 +32,8 @@ describe("GET /users/:username", function () {
         username: "u1",
         firstName: "U1F",
         lastName: "U1L",
-        email: "u1@email.com"
+        email: "u1@email.com",
+        lifxToken: expect.any(String) 
       },
     });
   });
@@ -66,7 +67,8 @@ describe("PATCH /users/:username", () => {
         username: "u1",
         firstName: "New",
         lastName: "U1L",
-        email: "u1@email.com"
+        email: "u1@email.com",
+        lifxToken: expect.any(String) 
       },
     });
   });
@@ -112,7 +114,8 @@ describe("PATCH /users/:username", () => {
         username: "u1",
         firstName: "U1F",
         lastName: "U1L",
-        email: "u1@email.com"
+        email: "u1@email.com",
+        lifxToken: expect.any(String) 
       },
     });
     const isSuccessful = await User.authenticate("u1", "new-password");

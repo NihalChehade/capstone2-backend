@@ -6,7 +6,7 @@ const {
   authenticateJWT,
   ensureLoggedIn,
 } = require("./auth");
-
+const db = require("../db"); // Import db if you need to close db connections
 
 const { SECRET_KEY } = require("../config");
 const testJwt = jwt.sign({ username: "test" }, SECRET_KEY);
@@ -75,4 +75,8 @@ describe("ensureLoggedIn", function () {
     };
     ensureLoggedIn(req, res, next);
   });
+});
+
+afterAll(async () => {
+  await db.end();  // Ensure all database connections are closed
 });

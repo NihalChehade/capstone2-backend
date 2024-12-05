@@ -83,6 +83,7 @@ describe("POST /auth/register", function () {
           lastName: "last",
           password: "password",
           email: "new@email.com",
+          lifxToken: "token1234567"
         });
     expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({
@@ -108,6 +109,7 @@ describe("POST /auth/register", function () {
           lastName: "last",
           password: "password",
           email: "not-an-email",
+          lifxToken: "tokenlifx456"
         });
     expect(resp.statusCode).toEqual(400);
   });

@@ -66,20 +66,4 @@ router.post("/register", async function (req, res, next) {
   }
 });
 
-// Logout route
-// router.post('/logout', ensureLoggedIn, async function(req, res, next) {
-//   try {
-//       // Destroy the session
-//       req.session.destroy(err => {
-//           if (err) {
-//               return next(err);
-//           }
-//           res.status(200).json({ message: 'Logout successful.' });
-//       });
-//   } catch (err) {
-//       return next(err);
-//   }
-// });
-
-
 module.exports = router;

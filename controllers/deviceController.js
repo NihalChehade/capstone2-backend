@@ -10,14 +10,10 @@ require("dotenv").config();
 async function sendLifxCommand(selector, action, lifxToken) {
   try {
     const url = `${process.env.LIFX_API}/${selector}/state`;
-    console.log("URL", url);
-    console.log("device controller lifxToken", lifxToken)
     const headers = {
       Authorization: `Bearer ${lifxToken}`,
       "Content-Type": "application/json",
     };
-
-    console.log("headers", headers);
     const response = await axios.put(url, action, { headers });
     return response.data;
   } catch (error) {
@@ -35,9 +31,6 @@ exports.controlADevice = async (req, res) => {
       const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-    console.log("res.locals.user.username", res.locals.user.username);
-    console.log("res.locals.user", res.locals.user);
-    console.log("res.locals.lifxToken", res.locals.lifxToken)
     const device = await Device.findByDeviceName(name, res.locals.user.username);
     if (!device) {
       return res.status(404).json({ message: "Device not found" });

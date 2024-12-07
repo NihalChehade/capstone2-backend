@@ -14,8 +14,9 @@ router.post('/', ensureLoggedIn, async (req, res, next) => {
   try {
     const validator = jsonschema.validate(req.body, deviceNewSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
-      throw new BadRequestError(errs);
+      // Collect error messages without stack details for security
+      const errs = validator.errors.map(e => e.message);
+      throw new BadRequestError(errs.join(", "));
     }
     const newDevice = await Device.create({ ...req.body, username: res.locals.user.username });
     res.status(201).json({device:newDevice});
@@ -30,8 +31,9 @@ router.patch('/:name/rename', ensureLoggedIn, async (req, res, next) => {
     const {name} =req.body;
     const validator = jsonschema.validate(req.body, deviceUpdateSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
-      throw new BadRequestError(errs);
+      // Collect error messages without stack details for security
+      const errs = validator.errors.map(e => e.message);
+      throw new BadRequestError(errs.join(", "));
     }
     const updatedDevice = await Device.updateDeviceName(req.params.name, name, res.locals.user.username);
     res.json({device:updatedDevice});

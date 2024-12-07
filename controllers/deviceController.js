@@ -5,6 +5,22 @@ const deviceUpdateSchema = require("../schemas/deviceUpdate.json");
 const { BadRequestError } = require("../expressError");
 require("dotenv").config();
 
+
+// Function to validate LIFX token
+exports.validateLifxToken =async (lifxToken) => {
+  try {
+    await axios.get(`${process.env.LIFX_API}/all`, {
+      headers: { Authorization: `Bearer ${lifxToken}` }
+    });
+    return true;  // Token is valid
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      return false;  // Token is invalid
+    }
+    throw new Error('Failed to validate token due to an unexpected error.');
+  }
+}
+
 // Function to send commands to LIFX API
 
 async function sendLifxCommand(selector, action, lifxToken) {

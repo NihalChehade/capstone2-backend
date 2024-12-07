@@ -10,6 +10,7 @@ const router = new express.Router();
 const { createToken } = require("../helpers/tokens");
 const userAuthSchema = require("../schemas/userAuth.json");
 const userRegisterSchema = require("../schemas/userRegister.json");
+const { validateLifxToken } = require('../controllers/deviceController');
 const { BadRequestError } = require("../expressError");
 
 /** POST /auth/token:  { username, password } => { token }
@@ -51,6 +52,12 @@ router.post("/token", async function (req, res, next) {
 
 router.post("/register", async function (req, res, next) {
   try {
+    const { lifxToken } = req.body;
+    const tokenIsValid = await validateLifxToken(lifxToken);
+    if (!tokenIsValid) {
+      throw new BadRequestError("Invalid LIFX Token.");
+    }
+    
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => {

@@ -31,9 +31,7 @@
     },
     "lifxToken": {
       "type": "string",
-      "description": "Token to access LIFX API services",
-      "minLength": 10,
-      "maxLength": 100 
+      "description": "Token to access LIFX API services"
     }
   },
   "additionalProperties": false,

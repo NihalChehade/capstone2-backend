@@ -29,10 +29,9 @@ exports.validateSerialnumber =async (serial_number, lifxToken) => {
     });
     return true;  // serial_number is valid
   } catch (error) {
-    if (error.response && error.response.status === 404) {
+    
       return false;  // serial_number is invalid
-    }
-    throw new Error('Failed to validate serial number due to an unexpected error.');
+   
   }
 }
 

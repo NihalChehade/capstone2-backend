@@ -1,6 +1,7 @@
 const express = require('express');
 const Device = require('../models/deviceModel');
 const { ensureLoggedIn, fetchLifxToken } = require('../middleware/auth');  
+const { validateSerialnumber } = require("../controllers/deviceController");
 const jsonschema = require("jsonschema");
 const deviceNewSchema = require("../schemas/deviceNew.json");
 const deviceUpdateSchema = require("../schemas/deviceUpdate.json");
@@ -10,8 +11,15 @@ const router = express.Router();
 const deviceController = require('../controllers/deviceController');
 
 // Route to handle device creation
-router.post('/', ensureLoggedIn, async (req, res, next) => {
+router.post('/', ensureLoggedIn, fetchLifxToken, async (req, res, next) => {
   try {
+    const { serial_number } = req.body;
+      if (serial_number) {
+        const serialIsValid = await validateSerialnumber(serial_number, res.locals.lifxToken);
+        if (!serialIsValid) {
+          throw new BadRequestError("Invalid serial number. Ensure adding your device to your lifx account before adding it to your dashboard!");
+        }
+      }
     const validator = jsonschema.validate(req.body, deviceNewSchema);
     if (!validator.valid) {
       // Collect error messages without stack details for security

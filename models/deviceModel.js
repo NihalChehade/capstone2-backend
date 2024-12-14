@@ -34,7 +34,7 @@ class Device {
       existingWithName &&
       existingWithName.serial_number !== device.serial_number
     ) {
-      throw new BadRequestError(
+      throw new BadRequestError({},
         "Another device with the same name already exists."
       );
     }
@@ -45,7 +45,7 @@ class Device {
       [newDeviceName, device.serial_number, username]
     );
     if (result.rows.length === 0) {
-      throw new BadRequestError("Update failed, no changes made.");
+      throw new BadRequestError({},"Update failed, no changes made.");
     }
     return result.rows[0];
   }
@@ -78,7 +78,7 @@ class Device {
 
     // Early throw if no fields to update
     if (fields.length === 0) {
-      throw new BadRequestError("No data provided to update.");
+      throw new BadRequestError({},"No data provided to update.");
     }
 
     // Build the SQL update clause dynamically

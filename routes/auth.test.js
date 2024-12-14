@@ -72,9 +72,16 @@ describe("POST /auth/token", function () {
 });
 
 /************************************** POST /auth/register */
-
+const { validateLifxToken } = require("../controllers/deviceController");
+jest.mock("../controllers/deviceController", () => ({
+  controlADevice: jest.fn((req, res) => res.status(200).send("Mock response")),
+  controlManyDevices: jest.fn((req, res) => res.status(200).send("Mock response")),
+  validateLifxToken: jest.fn(() => Promise.resolve(true)),
+}));
 describe("POST /auth/register", function () {
   test("works for anon", async function () {
+    // Mock validateLifxToken to return true
+  validateLifxToken.mockResolvedValue(true);
     const resp = await request(app)
         .post("/auth/register")
         .send({

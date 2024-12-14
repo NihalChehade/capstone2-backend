@@ -4,7 +4,7 @@
   "type": "object",
   "default": {},
   "title": "Root Schema",
-  "required": ["name", "serial_number", "type", "status","room"],
+  "required": ["name", "serial_number", "type", "status", "room"],
   "properties": {
     "name": {
       "type": "string",
@@ -13,16 +13,22 @@
       "minLength": 3,
       "maxLength": 20,
       "errorMessage": {
-            "minLength": "The name must be at least 3 characters long.",
-            "maxLength": "The name must not exceed 20 characters."
-        },
+        "type": "The name must be a string!",
+        "minLength": "The name must be at least 3 characters long.",
+        "maxLength": "The name must not exceed 20 characters."
+      },
       "examples": ["light1"]
     },
     "serial_number": {
       "type": "string",
       "default": "",
       "title": "The Serial Schema",
-      "length": 12,
+      "minLength": 12,
+      "maxLength": 12,
+      "errorMessage": {
+        "minLength": "The serial number must be exactly 12 characters long.",
+        "maxLength": "The serial number must be exactly 12 characters long."
+      },
       "examples": ["d073d5d47632"]
     },
     "type": {
@@ -32,9 +38,9 @@
       "minLength": 3,
       "maxLength": 30,
       "errorMessage": {
-            "minLength": "The type must be at least 3 characters long.",
-            "maxLength": "The type must not exceed 20 characters."
-        },
+        "minLength": "The type must be at least 3 characters long.",
+        "maxLength": "The type must not exceed 30 characters."
+      },
       "examples": ["light", "thermostat", "motion sensor"]
     },
     "room": {
@@ -44,9 +50,9 @@
       "minLength": 3,
       "maxLength": 30,
       "errorMessage": {
-            "minLength": "The room must be at least 3 characters long.",
-            "maxLength": "The room must not exceed 20 characters."
-        },
+        "minLength": "The room must be at least 3 characters long.",
+        "maxLength": "The room must not exceed 30 characters."
+      },
       "examples": ["bedroom", "kitchen", "livingroom"]
     },
     "status": {

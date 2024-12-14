@@ -3,13 +3,13 @@ const app = require("../app");
 const db = require("../db");
 const Device = require("../models/deviceModel");
 
+
 const {
   commonBeforeAll,
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
-  u1Token,
-  u2Token
+  u1Token
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -17,13 +17,25 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
+
+const { validateSerialNumber } = require("../controllers/deviceController");
+jest.mock("../controllers/deviceController", () => ({
+  controlADevice: jest.fn((req, res) => res.status(200).send("Mock response")),
+  controlManyDevices: jest.fn((req, res) => res.status(200).send("Mock response")),
+  
+  validateSerialNumber: jest.fn(() => Promise.resolve(true))
+}));
+
+
 describe("POST /devices", function () {
-  test("Can create a new device if logged in with serial_number", async function () {
+ 
+  test("Can create a new device if logged in with a valid serial_number", async function () {
+    validateSerialNumber.mockResolvedValue(true);
     const resp = await request(app)
       .post("/devices")
       .set("authorization", `Bearer ${u1Token}`)
       .send({
-        serial_number: "SN123456",
+        serial_number: "SN1234565fh6",
         name: "NewLight",
         room: "Office",
         type: "Light",
@@ -34,7 +46,7 @@ describe("POST /devices", function () {
     expect(resp.statusCode).toBe(201);
     expect(resp.body).toEqual({
       device: {
-        serial_number: "SN123456",
+        serial_number: "SN1234565fh6",
         name: "NewLight",
         room: "Office",
         type: "Light",
@@ -50,7 +62,7 @@ describe("POST /devices", function () {
     const resp = await request(app)
       .post("/devices")
       .send({
-        serial_number: "SN123456",
+        serial_number: "SN123456yc56",
         name: "NewLight",
         room: "Office",
         type: "Light",

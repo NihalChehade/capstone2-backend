@@ -22,7 +22,7 @@ exports.validateLifxToken =async (lifxToken) => {
 }
 
 // Function to validate device serial number
-exports.validateSerialnumber =async (serial_number, lifxToken) => {
+exports.validateSerialNumber =async (serial_number, lifxToken) => {
   try {
     await axios.get(`${process.env.LIFX_API}/id:${serial_number}`, {
       headers: { Authorization: `Bearer ${lifxToken}` }

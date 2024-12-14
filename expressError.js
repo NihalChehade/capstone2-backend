@@ -5,12 +5,14 @@
  */
 
 class ExpressError extends Error {
-  constructor(message, status) {
+  constructor(message, status, errors = null) {
     super();
     this.message = message;
     this.status = status;
+    this.errors = errors;  // Optional detailed errors
   }
 }
+
 
 /** 404 NOT FOUND error. */
 
@@ -31,10 +33,11 @@ class UnauthorizedError extends ExpressError {
 /** 400 BAD REQUEST error. */
 
 class BadRequestError extends ExpressError {
-  constructor(message = "Bad Request") {
-    super(message, 400);
+  constructor(errors = {}, message = "Bad Request") {
+    super(message, 400, errors);
   }
 }
+
 
 /** 403 BAD REQUEST error. */
 
